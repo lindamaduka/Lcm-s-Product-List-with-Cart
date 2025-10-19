@@ -359,3 +359,8 @@ main.container {
 .modal-box li:last-child {
   border: 0;
 }
+
+footer {
+  text-align: center;
+  padding: 1rem;
+}

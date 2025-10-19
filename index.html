@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Linda's Product List with Cart</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <symbol id="icon-add-to-cart" viewBox="0 0 24 24">
+        <path
+          d="M7 4H5L3 16h14l2-8H7Zm-2 14a2 2 0 110 4 2 2 0 010-4Zm10 0a2 2 0 110 4 2 2 0 010-4Z"
+          fill="currentColor"
+        />
+      </symbol>
+      <symbol id="icon-increment-quantity" viewBox="0 0 24 24">
+        <path
+          d="M12 5v14M5 12h14"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="icon-decrement-quantity" viewBox="0 0 24 24">
+        <path
+          d="M5 12h14"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="icon-remove-item" viewBox="0 0 24 24">
+        <path
+          d="M6 6l12 12m0-12L6 18"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          fill="none"
+        />
+      </symbol>
+      <symbol id="icon-order-confirmed" viewBox="0 0 24 24">
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+        />
+        <path
+          d="M8 13l3 3 5-5"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+        />
+      </symbol>
+    </svg>
+
+    <header class="top container">
+      <h1>Desserts</h1>
+      <button id="btnNewOrder" class="btn start">Start New Order</button>
+      <div class="cart-number">
+        Your Cart <span id="item-count" class="number">0</span>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="products" class="grid"></section>
+
+      <aside class="sidebar">
+        <h2>Your Cart (<span id="cart-count-aside">0</span>)</h2>
+        <ul id="cart-items"></ul>
+        <p class="total">Order Total <strong id="cart-total">$0.00</strong></p>
+        <button id="btnConfirm" class="btn primary">Confirm Order</button>
+      </aside>
+    </main>
+
+    <div id="order-modal">
+      <div class="modal-box">
+        <svg class="icon lg ok"><use href="#icon-order-confirmed"></use></svg>
+        <h3>Order Confirmed</h3>
+        <p class="description">We hope you enjoy your food!</p>
+        <ul id="order-details"></ul>
+        <p class="total">Order Total: <strong id="order-total"></strong></p>
+        <button id="btnStartOver" class="btn solid full">
+          Start New Order
+        </button>
+      </div>
+    </div>
+
+    <script src="src/app.js"></script>
+  </body>
+</html>

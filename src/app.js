@@ -72,7 +72,7 @@ const money = (n) => `$${n.toFixed(2)}`;
 function headerCount() {
   return (
     document.getElementById("item-count") ||
-    document.querySelector('[id="item -count"]')
+    document.querySelector('[id="item-count"]')
   );
 }
 

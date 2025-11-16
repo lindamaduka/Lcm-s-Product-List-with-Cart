@@ -2,115 +2,121 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Linda's Product List with Cart</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="src/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Linda's Product list with Cart</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
-      <symbol id="icon-add-to-cart" viewBox="0 0 24 24">
-        <path
-          d="M7 4H5L3 16h14l2-8H7Zm-2 14a2 2 0 110 4 2 2 0 010-4Zm10 0a2 2 0 110 4 2 2 0 010-4Z"
-          fill="currentColor"
-        />
-      </symbol>
-      <symbol id="icon-increment-quantity" viewBox="0 0 24 24">
-        <path
-          d="M12 5v14M5 12h14"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          fill="none"
-        />
-      </symbol>
-      <symbol id="icon-decrement-quantity" viewBox="0 0 24 24">
-        <path
-          d="M5 12h14"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          fill="none"
-        />
-      </symbol>
-      <symbol id="icon-remove-item" viewBox="0 0 24 24">
-        <path
-          d="M6 6l12 12m0-12L6 18"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          fill="none"
-        />
-      </symbol>
-      <symbol id="icon-order-confirmed" viewBox="0 0 24 24">
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="2"
-          fill="none"
-        />
-        <path
-          d="M8 13l3 3 5-5"
-          stroke="currentColor"
-          stroke-width="2"
-          fill="none"
-          stroke-linecap="round"
-        />
-      </symbol>
-    </svg>
-
-    <header class="top container">
+    <header class="container header">
       <h1>Desserts</h1>
-      <button id="btnNewOrder" class="btn start">Start New Order</button>
-      <div class="cart-number">
-        Your Cart <span id="item-count" class="number">0</span>
+
+      <!-- Filters -->
+      <div class="filter-controls" aria-label="Filter by category">
+        <button class="btn filter-btn active" data-category="all">All</button>
+        <button class="btn filter-btn" data-category="Waffle">Waffles</button>
+        <button class="btn filter-btn" data-category="Crème Brûlée">
+          Crème Brûlée
+        </button>
+        <button class="btn filter-btn" data-category="Macaron">Macarons</button>
+        <button class="btn filter-btn" data-category="Tiramisu">
+          Tiramisu
+        </button>
+        <button class="btn filter-btn" data-category="Baklava">Baklava</button>
+        <button class="btn filter-btn" data-category="Pie">Pie</button>
+        <button class="btn filter-btn" data-category="Cake">Cake</button>
+        <button class="btn filter-btn" data-category="Brownie">Brownie</button>
+        <button class="btn filter-btn" data-category="Panna Cotta">
+          Panna Cotta
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="search-container">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search desserts..."
+          aria-label="Search products"
+        />
       </div>
     </header>
 
     <main class="container">
-      <section id="products" class="grid"></section>
+      <section id="products" class="products" aria-label="Products"></section>
+      <aside class="sidebar" aria-label="Your cart">
+        <h2>Your Cart (<span id="aside-cart-count">0</span>)</h2>
 
-      <aside class="sidebar">
-        <h2>Your Cart (<span id="cart-count-aside">0</span>)</h2>
-        <ul id="cart-items"></ul>
-        <p class="total">Order Total: <strong id="cart-total">$0.00</strong></p>
-        <button id="btnConfirm" class="btn primary">Confirm Order</button>
-      </aside>
+        <!-- Empty state -->
+        <div
+          id="cart-empty"
+          class="empty-cart"
+          role="status"
+          aria-live="polite"
+        >
+          <img src="images/illustration-empty-cart.svg" alt="" />
+          <p>Your added items will appear here</p>
+        </div>
+
+        <!-- Items list -->
+<!-- Items list -->
+<ul id="cart-items"></ul>
+
+<p class="total">
+  <span>Order Total</span>
+  <strong id="cart-total">$0.00</strong>
+</p>
+
+<!-- Carbon neutral delivery icon -->
+<div class="carbon-badge">
+  <img class="tree" src="images/icon-carbon-neutral.svg" alt="" />
+  <span>This is a <strong>carbon-neutral</strong> delivery</span>
+</div>
+
+<button id="btnConfirm" class="btn primary">Confirm Order</button>
+</aside>
     </main>
 
-    <div id="order-modal">
+    <!-- Order Confirmation Modal -->
+    <div
+      id="order-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="order-title"
+    >
       <div class="modal-box">
-        <svg class="icon lg ok"><use href="#icon-order-confirmed"></use></svg>
-        <h3>Order Confirmed</h3>
+        <div class="modal-head">
+          <img src="images/icon-order-confirmed.svg" alt="" class="ok" />
+          <h3 id="order-title">Order Confirmed</h3>
+        </div>
+
         <p class="description">We hope you enjoy your food!</p>
+
         <ul id="order-details"></ul>
-        <p class="total">Order Total: <strong id="order-total"></strong></p>
+
+        <p class="total">
+          <span>Order Total</span>
+          <strong id="order-total">$0.00</strong>
+        </p>
+
         <button id="btnStartOver" class="btn solid full">
           Start New Order
         </button>
       </div>
     </div>
-    <footer>
+
+    <footer class="footer">
       Coded by
-      <a href="https://github.com/lindamaduka" target="_blank">Linda Maduka </a>
+      <a href="https://github.com/lindamaduka" target="_blank" rel="noreferrer"
+        >Linda Maduka</a
+      >
     </footer>
-    <script src="src/app.js"></script>
+
+    <script src="script.js"></script>
   </body>
 </html>

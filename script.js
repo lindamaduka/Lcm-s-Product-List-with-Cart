@@ -220,7 +220,7 @@ function addToCart(productId) {
   if (btn) showQtyOnButton(btn, item.qty);
 
   updateCartDisplay();
-  saveCartToStorage(); // SAVE TO LOCALSTORAGE
+  saveCartToStorage(); // Save to localstorage
 }
 
 function increaseQuantity(productId) {

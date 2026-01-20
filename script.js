@@ -144,26 +144,35 @@ function displayProducts() {
     console.log(`Card created with ID: ${product.id}`);
 
     li.innerHTML = `
-                    <article class="product">
-                        <div class="product_image-wrapper">
-                            <img src="${product.images.desktop}" alt="${product.name}" class="product_image">
-                            <button type="button" class="product_add-btn" data-id="${product.id}">
-                              <img src="images/icon-add-to-cart.svg"> Add to Cart
-                            </button>
-                            <div class="quantity-controls">
-                                <button type="button" class="quantity-btn decrease-btn" data-id="${product.id}"><img src="images/icon-decrement-quantity.svg"></button>
-                                <span class="quantity-display">1</span>
-                                <button type="button" class="quantity-btn increase-btn" data-id="${product.id}"><img src="images/icon-increment-quantity.svg"</button>
-                            </div>
-                        </div>
-                        <div class="product_details">
-                            <p class="product_category">${product.category}</p>
-                            <h3 class="product_name">${product.name}</h3>
-                            <p class="product_price">$${product.price.toFixed(2)}</p>
-                        </div>
-                    </article>
-                `;
+  <article class="product">
+    <div class="product_image-wrapper">
+      <img src="${product.images.desktop}" alt="${product.name}" class="product_image">
 
+      <button type="button" class="product_add-btn" data-id="${product.id}">
+        <img src="images/icon-add-to-cart.svg" alt="" class="cart-icon" />
+        <span>Add to Cart</span>
+      </button>
+
+      <div class="quantity-controls">
+        <button type="button" class="quantity-btn decrease-btn" data-id="${product.id}">
+          <img src="images/icon-decrement-quantity.svg" alt="">
+        </button>
+
+        <span class="quantity-display">1</span>
+
+        <button type="button" class="quantity-btn increase-btn" data-id="${product.id}">
+          <img src="images/icon-increment-quantity.svg" alt="">
+        </button>
+      </div>
+    </div>
+
+    <div class="product_details">
+      <p class="product_category">${product.category}</p>
+      <h3 class="product_name">${product.name}</h3>
+      <p class="product_price">$${product.price.toFixed(2)}</p>
+    </div>
+  </article>
+`;
     productsGrid.appendChild(li);
   });
 }

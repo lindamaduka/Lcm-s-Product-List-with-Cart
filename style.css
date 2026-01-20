@@ -43,9 +43,9 @@ button {
 .app {
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-6) var(--space-4);
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-6);
 }
 
 header h1 {
@@ -62,75 +62,91 @@ header h1 {
   gap: var(--space-6);
 }
 
-.product-card {
-  position: relative;
-}
-
 .product {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  background: var(--rose-100);
-  border: 1px solid var(--rose-400);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  gap: var(--space-3);
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: 0;
 }
 
 .product_image-wrapper {
   position: relative;
+  margin-bottom: 22px;
+}
+
+/* Add-to-cart pill button */
+.product_add-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 22px;
+  min-width: 170px;
+  background: var(--rose-100);
+  border: 1px solid var(--rose-300);
+  border-radius: 999px;
+  color: var(--rose-900);
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  z-index: 5;
+}
+
+.product_add-btn .cart-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.product_add-btn:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Quantity pill sits in the same place */
+.quantity-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  z-index: 6;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 170px;
+  padding: 10px 16px;
+  background: var(--red);
+  border-radius: 999px;
+  color: var(--rose-100);
+}
+
+.product-card.in-cart .product_add-btn {
+  display: none;
+}
+
+.product-card.in-cart .quantity-controls {
+  display: flex;
 }
 
 .product_image {
   width: 100%;
-  height: 180px;
+  height: 240px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 2px solid transparent;
-  transition: border-color 0.3s;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.06);
 }
 
 .product-card.in-cart .product_image {
   border-color: var(--red);
-}
-
-.product_add-btn,
-.quantity-controls {
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-.product_add-btn {
-  border: 1px solid var(--rose-300);
-  background: var(--rose-100);
-  color: var(--rose-900);
-  padding: 12px 24px;
-  border-radius: 999px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s;
-}
-
-.product_add-btn:hover {
-  color: var(--red);
-  border-color: var(--red);
-}
-
-.quantity-controls {
-  display: none;
-  background: var(--red);
-  padding: 8px 16px;
-  border-radius: 999px;
-  align-items: center;
-  gap: 2rem;
-  color: white;
-  min-width: 140px;
 }
 
 .product-card.in-cart .product_add-btn {
@@ -151,7 +167,7 @@ header h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: var(--space-4);
   padding: 0;
   transition: all 0.2s;
 }
@@ -174,12 +190,12 @@ header h1 {
 .product_category {
   margin: 0;
   color: var(--rose-300);
-  font-size: (--space-3);
+  font-size: var (--space-3);
 }
 
 .product_name {
   margin: 4px 0;
-  font-size: 16px;
+  font-size: var(--space-4);
   font-weight: 600;
   line-height: 1.2;
 }
@@ -188,11 +204,11 @@ header h1 {
   margin: 0;
   color: var(--red);
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--space-4);
 }
 
 #cart {
-  background: (--rose-100);
+  background: var (--rose-100);
   border-radius: 12px;
   padding: var(--space-6);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -205,7 +221,7 @@ header h1 {
 
 .cart_empty {
   text-align: center;
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-6) var(--space-4);
   color: var(--rose-500);
   display: flex;
   flex-direction: column;
@@ -241,7 +257,7 @@ header h1 {
 .cart-item-pricing {
   display: flex;
   gap: var(--space-3);
-  font-size: 0.9rem;
+  font-size: var(--space-3);
 }
 
 .cart-item-quantity {
@@ -265,7 +281,7 @@ header h1 {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: var(--space-3);
   line-height: 1;
   padding: 0;
   transition: all 0.2s;
@@ -319,16 +335,16 @@ header h1 {
   width: 100%;
   border: none;
   background: var(--red);
-  color: white;
-  padding: 1rem;
+  color: var(--rose-100);
+  padding: 16px;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 16px;
   transition: background 0.3s;
 }
 
 .cart_confirm-btn:hover {
-  background: var(--red-hover);
+  background: var(--red);
 }
 
 .modal-overlay {
@@ -347,9 +363,9 @@ header h1 {
 }
 
 .modal {
-  background: white;
+  background: var(--rose-100);
   border-radius: 12px 12px 0 0;
-  padding: var(--space-8);
+  padding: var(--space-6);
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
@@ -364,7 +380,7 @@ header h1 {
 
 .modal h2 {
   margin: 0 0 var(--space-2);
-  font-size: 2rem;
+  font-size: 32px;
 }
 
 .modal-subtitle {
@@ -405,14 +421,14 @@ header h1 {
 
 .summary-item-name {
   font-weight: 600;
-  margin: 0 0 0.25rem;
-  font-size: 0.9rem;
+  margin: 0 0 4px;
+  font-size: 16px;
 }
 
 .summary-item-pricing {
   display: flex;
   gap: var(--space-3);
-  font-size: 0.85rem;
+  font-size: 16px;
 }
 
 .summary-item-qty {
@@ -437,11 +453,11 @@ header h1 {
 }
 
 .modal-total-label {
-  font-size: 0.9rem;
+  font-size: 16px;
 }
 
 .modal-total-value {
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: 700;
 }
 
@@ -449,15 +465,15 @@ header h1 {
   width: 100%;
   border: none;
   background: var(--red);
-  color: white;
-  padding: 1rem;
+  color: var(--rose-100);
+  padding: 16px;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 16px;
 }
 
 #newOrderBtn:hover {
-  background: var(--red-hover);
+  background: var(--red);
 }
 
 @media (min-width: 768px) {

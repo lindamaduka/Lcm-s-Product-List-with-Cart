@@ -1,122 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Linda's Product list with Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" type="image/png" href="images/favicon-32x32.png" />
     <link rel="stylesheet" href="style.css" />
+    <title>Product list with cart</title>
   </head>
   <body>
-    <header class="container header">
-      <h1>Desserts</h1>
-
-      <!-- Filters -->
-      <div class="filter-controls" aria-label="Filter by category">
-        <button class="btn filter-btn active" data-category="all">All</button>
-        <button class="btn filter-btn" data-category="Waffle">Waffle</button>
-        <button class="btn filter-btn" data-category="Crème Brûlée">
-          Crème Brûlée
-        </button>
-        <button class="btn filter-btn" data-category="Macaron">Macaron</button>
-        <button class="btn filter-btn" data-category="Tiramisu">
-          Tiramisu
-        </button>
-        <button class="btn filter-btn" data-category="Baklava">Baklava</button>
-        <button class="btn filter-btn" data-category="Pie">Pie</button>
-        <button class="btn filter-btn" data-category="Cake">Cake</button>
-        <button class="btn filter-btn" data-category="Brownie">Brownie</button>
-        <button class="btn filter-btn" data-category="Panna Cotta">
-          Panna Cotta
-        </button>
-      </div>
-
-      <!-- Search -->
-      <div class="search-container">
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="Search desserts..."
-          aria-label="Search products"
-        />
+    <header>
+      <div class="app">
+        <h1>Desserts</h1>
       </div>
     </header>
 
-    <main class="container">
-      <section id="products" class="products" aria-label="Products"></section>
-      <aside class="sidebar" aria-label="Your cart">
-        <h2>Your Cart (<span id="aside-cart-count">0</span>)</h2>
+    <main class="app">
+      <section id="products" aria-label="Dessert products">
+        <ul class="products-grid"></ul>
+      </section>
 
-        <!-- Empty state -->
-        <div
-          id="cart-empty"
-          class="empty-cart"
-          role="status"
-          aria-live="polite"
-        >
-          <img src="images/illustration-empty-cart.svg" alt="" />
+      <section id="cart" aria-label="Shopping cart">
+        <h2>Your Cart (<span id="cartCount">0</span>)</h2>
+
+        <div class="cart_empty" aria-live="polite">
+          <img src="images/illustration-empty-cart.svg" alt="empty cart" />
           <p>Your added items will appear here</p>
         </div>
 
-        <!-- Items list -->
-<!-- Items list -->
-<ul id="cart-items"></ul>
+        <ul class="cart_items hidden" aria-label="Cart items list"></ul>
 
-<p class="total">
-  <span>Order Total</span>
-  <strong id="cart-total">$0.00</strong>
-</p>
-
-<!-- Carbon neutral delivery icon -->
-<div class="carbon-badge">
-  <img class="tree" src="images/icon-carbon-neutral.svg" alt="" />
-  <span>This is a <strong>carbon-neutral</strong> delivery</span>
-</div>
-
-<button id="btnConfirm" class="btn primary">Confirm Order</button>
-</aside>
+        <div class="cart_summary hidden">
+          <div class="cart_total-row">
+            <p class="cart_total-label">Order Total</p>
+            <p class="cart_total-value">$<span id="totalAmount">0.00</span></p>
+          </div>
+          <div class="carbon-neutral">
+            <img src="images/icon-carbon-neutral.svg" alt="" srcset="" />
+            <p>This is a <strong>carbon-neutral</strong> delivery</p>
+          </div>
+          <button type="button" id="confirmOrderBtn" class="cart_confirm-btn">
+            Confirm Order
+          </button>
+        </div>
+      </section>
     </main>
 
-    <!-- Order Confirmation Modal -->
-    <div
-      id="order-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="order-title"
-    >
-      <div class="modal-box">
-        <div class="modal-head">
-          <img src="images/icon-order-confirmed.svg" alt="" class="ok" />
-          <h3 id="order-title">Order Confirmed</h3>
+    <div class="modal-overlay hidden" id="orderModal">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <div class="success-icon">✓</div>
+        <h2 id="modalTitle">Order Confirmed</h2>
+        <p class="modal-subtitle">We hope you enjoy your food!</p>
+
+        <div class="modal_summary" aria-label="Order summary"></div>
+
+        <div class="modal-total">
+          <span class="modal-total-label">Order Total</span>
+          <span class="modal-total-value"
+            >$<span id="modalTotalAmount">0.00</span></span
+          >
         </div>
 
-        <p class="description">We hope you enjoy your food!</p>
-
-        <ul id="order-details"></ul>
-
-        <p class="total">
-          <span>Order Total</span>
-          <strong id="order-total">$0.00</strong>
-        </p>
-
-        <button id="btnStartOver" class="btn solid full">
-          Start New Order
-        </button>
+        <button type="button" id="newOrderBtn">Start New Order</button>
       </div>
     </div>
-
     <footer class="footer">
       Coded by
       <a href="https://github.com/lindamaduka" target="_blank" rel="noreferrer"
         >Linda Maduka</a
       >
     </footer>
-
     <script src="script.js"></script>
   </body>
 </html>

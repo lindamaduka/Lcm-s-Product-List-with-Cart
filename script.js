@@ -1,3 +1,5 @@
+let cart = [];
+
 const products = [
   {
     id: 1,
@@ -109,98 +111,60 @@ const products = [
   },
 ];
 
-function saveCartToStorage() {
-  try {
-    localStorage.setItem("dessertCart", JSON.stringify(cart));
-  } catch (error) {
-    console.error("Error saving cart to localStorage:", error);
-  }
-}
+console.log("Total products:", products.length);
+console.log("First product:", products[0]);
 
-function loadCartFromStorage() {
-  try {
-    const savedCart = localStorage.getItem("dessertCart");
-    if (savedCart) {
-      cart = JSON.parse(savedCart);
-    }
-  } catch (error) {
-    console.error("Error loading cart from localStorage:", error);
-    cart = [];
-  }
-}
+const productsGrid = document.querySelector(".products-grid");
+console.log("Products grid element:", productsGrid);
 
-let cart = [];
-let currentCategory = "all";
-let searchTerm = "";
+const cartEmpty = document.querySelector(".cart_empty");
+console.log("Empty cart message:", cartEmpty);
 
-const $ = (s) => document.querySelector(s);
-const $$ = (s) => document.querySelectorAll(s);
-const money = (n) => `$${n.toFixed(2)}`;
+const cartItemsList = document.querySelector(".cart_items");
+console.log("Cart items list:", cartItemsList);
 
-const cartCount = $("#aside-cart-count");
+const cartSummary = document.querySelector(".cart_summary");
 
-function findCartItem(productId) {
-  return cart.find((i) => i.id === productId);
-}
-function cartButtonForProduct(id) {
-  return document.querySelector(`.cart-button[data-id="${id}"]`);
-}
+const totalAmount = document.getElementById("totalAmount");
+console.log("Total amount display:", totalAmount);
+
+const cartCount = document.getElementById("cartCount");
+const confirmOrderBtn = document.getElementById("confirmOrderBtn");
+const orderModal = document.getElementById("orderModal");
+const modalSummary = document.querySelector(".modal_summary");
+const modalTotalAmount = document.getElementById("modalTotalAmount");
+const newOrderBtn = document.getElementById("newOrderBtn");
 
 function displayProducts() {
-  const grid = $("#products");
-  grid.innerHTML = "";
+  productsGrid.innerHTML = "";
+  products.forEach((product) => {
+    const li = document.createElement("li");
+    li.className = "product-card";
+    li.setAttribute("data-id", product.id);
+    console.log(`Card created with ID: ${product.id}`);
 
-  const visible = products.filter((p) => {
-    const byCat = currentCategory === "all" || p.category === currentCategory;
-    const byText = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-    return byCat && byText;
-  });
+    li.innerHTML = `
+                    <article class="product">
+                        <div class="product_image-wrapper">
+                            <img src="${product.images.desktop}" alt="${product.name}" class="product_image">
+                            <button type="button" class="product_add-btn" data-id="${product.id}">
+                              <img src="images/icon-add-to-cart.svg"> Add to Cart
+                            </button>
+                            <div class="quantity-controls">
+                                <button type="button" class="quantity-btn decrease-btn" data-id="${product.id}"><img src="images/icon-decrement-quantity.svg"></button>
+                                <span class="quantity-display">1</span>
+                                <button type="button" class="quantity-btn increase-btn" data-id="${product.id}"><img src="images/icon-increment-quantity.svg"</button>
+                            </div>
+                        </div>
+                        <div class="product_details">
+                            <p class="product_category">${product.category}</p>
+                            <h3 class="product_name">${product.name}</h3>
+                            <p class="product_price">$${product.price.toFixed(2)}</p>
+                        </div>
+                    </article>
+                `;
 
-  if (!visible.length) {
-    grid.innerHTML = '<p class="no-results">No products found.</p>';
-    return;
-  }
-
-  visible.forEach((product) => {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="img-wrap">
-        <picture>
-          <source media="(min-width:1024px)" srcset="${product.images.desktop}">
-          <source media="(min-width:600px)"  srcset="${product.images.tablet}">
-          <img src="${product.images.mobile}" alt="${
-      product.name
-    }" loading="lazy">
-        </picture>
-
-        <div class="cart-button" data-id="${
-          product.id
-        }" aria-pressed="false" role="button" tabindex="0">
-          <img class="icon" src="images/icon-add-to-cart.svg" alt="">
-          <span class="label-default">Add to Cart</span>
-          <span class="qty-wrap" hidden>
-            <button class="qty-btn qty-minus" aria-label="Decrease">
-              <img class="icon" src="images/icon-decrement-quantity.svg" alt="">
-            </button>
-            <span class="qty">1</span>
-            <button class="qty-btn qty-plus" aria-label="Increase">
-              <img class="icon" src="images/icon-increment-quantity.svg" alt="">
-            </button>
-          </span>
-        </div>
-      </div>
-
-      <p class="category">${product.category}</p>
-      <h3>${product.name}</h3>
-      <strong class="price">${money(product.price)}</strong>
-    `;
-    grid.appendChild(card);
-  });
-
-  cart.forEach(({ id, qty }) => {
-    const btn = cartButtonForProduct(id);
-    if (btn) showQtyOnButton(btn, qty);
+    productsGrid.appendChild(li);
   });
 }
 
@@ -208,229 +172,162 @@ function addToCart(productId) {
   const product = products.find((p) => p.id === productId);
   if (!product) return;
 
-  let item = findCartItem(productId);
-  if (item) {
-    item.qty += 1;
+  const existingItem = cart.find((item) => item.id === productId);
+  if (existingItem) {
+    existingItem.quantity++;
   } else {
-    item = { ...product, qty: 1 };
-    cart.push(item);
+    cart.push({ ...product, quantity: 1 });
   }
-
-  const btn = cartButtonForProduct(productId);
-  if (btn) showQtyOnButton(btn, item.qty);
-
   updateCartDisplay();
-  saveCartToStorage(); // Save to localstorage
+  updateProductCards();
 }
 
-function increaseQuantity(productId) {
-  const item = findCartItem(productId);
-  if (!item) return;
-  item.qty += 1;
-
-  const btn = cartButtonForProduct(productId);
-  if (btn) btn.querySelector(".qty").textContent = item.qty;
-
-  updateCartDisplay();
-  saveCartToStorage();
-}
-
-function decreaseQuantity(productId) {
-  const item = findCartItem(productId);
+function updateQuantity(productId, change) {
+  const item = cart.find((item) => item.id === productId);
   if (!item) return;
 
-  item.qty -= 1;
-
-  const btn = cartButtonForProduct(productId);
-  if (item.qty <= 0) {
-    cart = cart.filter((i) => i.id !== productId);
-    if (btn) showAddLabelOnButton(btn);
-  } else if (btn) {
-    btn.querySelector(".qty").textContent = item.qty;
+  item.quantity += change;
+  if (item.quantity <= 0) {
+    removeFromCart(productId);
+  } else {
+    updateCartDisplay();
+    updateProductCards();
   }
+}
 
+function removeFromCart(productId) {
+  cart = cart.filter((item) => item.id !== productId);
   updateCartDisplay();
-  saveCartToStorage();
+  updateProductCards();
 }
 
-function removeItem(productId) {
-  const btn = cartButtonForProduct(productId);
-  cart = cart.filter((i) => i.id !== productId);
-  if (btn) showAddLabelOnButton(btn);
-  updateCartDisplay();
-  saveCartToStorage();
-}
+function updateProductCards() {
+  products.forEach((product) => {
+    const card = document.querySelector(
+      `.product-card[data-id="${product.id}"]`,
+    );
+    const cartItem = cart.find((item) => item.id === product.id);
 
-function showQtyOnButton(btn, qty) {
-  btn.setAttribute("aria-pressed", "true");
-  btn.querySelector(".label-default").hidden = true;
-  btn.querySelector(".qty-wrap").hidden = false;
-  btn.querySelector(".qty").textContent = qty;
-  btn.closest(".card")?.classList.add("selected");
-}
-function showAddLabelOnButton(btn) {
-  btn.setAttribute("aria-pressed", "false");
-  btn.querySelector(".label-default").hidden = false;
-  btn.querySelector(".qty-wrap").hidden = true;
-  btn.closest(".card")?.classList.remove("selected");
-}
-
-function calculateTotal() {
-  return cart.reduce((sum, i) => sum + i.qty * i.price, 0);
-}
-
-function showEmptyCart() {
-  $("#cart-empty").style.display = "flex";
-  $("#cart-items").style.display = "none";
-}
-
-function hideEmptyCart() {
-  $("#cart-empty").style.display = "none";
-  $("#cart-items").style.display = "block";
+    if (cartItem) {
+      card.classList.add("in-cart");
+      const qtyDisplay = card.querySelector(".quantity-display");
+      if (qtyDisplay) qtyDisplay.textContent = cartItem.quantity;
+    } else {
+      card.classList.remove("in-cart");
+    }
+  });
 }
 
 function updateCartDisplay() {
-  if (cartCount) cartCount.textContent = cart.reduce((s, i) => s + i.qty, 0);
+  const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  cartCount.textContent = itemCount;
 
-  const list = $("#cart-items");
-  list.innerHTML = "";
-  if (!cart.length) {
-    showEmptyCart();
-  } else {
-    hideEmptyCart();
-    cart.forEach((item) => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <span>${item.qty}× ${item.name}</span>
-        <span>${money(item.qty * item.price)}</span>
-        <button class="btn remove" data-id="${item.id}" aria-label="Remove ${
-        item.name
-      }">
-          <img class="icon" src="images/icon-remove-item.svg" alt="">
-        </button>
-      `;
-      list.appendChild(li);
-    });
+  if (cart.length === 0) {
+    cartEmpty.classList.remove("hidden");
+    cartItemsList.classList.add("hidden");
+    cartSummary.classList.add("hidden");
+    return;
   }
 
-  $("#cart-total").textContent = money(calculateTotal());
-  const confirm = $("#btnConfirm");
-  if (confirm) {
-    confirm.disabled = cart.length === 0;
-    confirm.style.opacity = cart.length === 0 ? 0.6 : 1;
-    confirm.style.cursor = cart.length === 0 ? "not-allowed" : "pointer";
-  }
-}
+  cartEmpty.classList.add("hidden");
+  cartItemsList.classList.remove("hidden");
+  cartSummary.classList.remove("hidden");
 
-function showModal() {
-  if (!cart.length) return;
-  const list = $("#order-details");
-  list.innerHTML = "";
+  cartItemsList.innerHTML = "";
+  let total = 0;
 
-  cart.forEach((i) => {
+  cart.forEach((item) => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+
     const li = document.createElement("li");
+    li.className = "cart-item";
     li.innerHTML = `
-      <div class="order-line-left">
-        <img class="order-thumb" src="${i.images.thumbnail}" alt="${i.name}">
-        <div>
-          <div class="order-title">${i.name}</div>
-          <div class="order-meta"><b>${i.qty}x</b>&nbsp;&nbsp;@ ${money(
-      i.price
-    )}</div>
-        </div>
-      </div>
-      <div class="order-line-right">${money(i.qty * i.price)}</div>
-    `;
-    list.appendChild(li);
+                    <div class="cart-item-details">
+                        <p class="cart-item-name">${item.name}</p>
+                        <div class="cart-item-pricing">
+                            <span class="cart-item-quantity">${item.quantity}x</span>
+                            <span class="cart-item-unit-price">@ $${item.price.toFixed(2)}</span>
+                            <span class="cart-item-total-price">$${itemTotal.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <button class="cart-item-remove" data-id="${item.id}"><img src="images/icon-remove-item.svg"></button>
+                `;
+    cartItemsList.appendChild(li);
   });
 
-  $("#order-total").textContent = money(calculateTotal());
-  $("#order-modal").classList.add("open");
-}
-function hideModal() {
-  $("#order-modal").classList.remove("open");
+  totalAmount.textContent = total.toFixed(2);
 }
 
-document.addEventListener("click", (e) => {
-  const filterBtn = e.target.closest(".filter-btn");
-  if (filterBtn) {
-    $$(".filter-btn").forEach((b) => b.classList.remove("active"));
-    filterBtn.classList.add("active");
-    currentCategory = filterBtn.dataset.category;
-    displayProducts();
-    return;
-  }
+function showOrderConfirmation() {
+  if (cart.length === 0) return;
 
-  const addBtn = e.target.closest(".cart-button");
-  if (addBtn && addBtn.getAttribute("aria-pressed") === "false") {
-    addToCart(+addBtn.dataset.id);
-    return;
-  }
+  modalSummary.innerHTML = "";
+  let total = 0;
 
-  if (e.target.closest(".qty-plus")) {
-    const id = +e.target.closest(".cart-button").dataset.id;
-    increaseQuantity(id);
-    return;
-  }
-  if (e.target.closest(".qty-minus")) {
-    const id = +e.target.closest(".cart-button").dataset.id;
-    decreaseQuantity(id);
-    return;
-  }
+  cart.forEach((item) => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
 
-  const removeBtn = e.target.closest("#cart-items .btn.remove");
+    const div = document.createElement("div");
+    div.className = "order-summary-item";
+    div.innerHTML = `
+                    <img src="${item.images.desktop}" alt="${item.name}" class="summary-item-image">
+                    <div class="summary-item-details">
+                        <p class="summary-item-name">${item.name}</p>
+                        <div class="summary-item-pricing">
+                            <span class="summary-item-qty">${item.quantity}x</span>
+                            <span class="summary-item-price">@ $${item.price.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <span class="summary-item-total">$${itemTotal.toFixed(2)}</span>
+                `;
+    modalSummary.appendChild(div);
+  });
+
+  modalTotalAmount.textContent = total.toFixed(2);
+  orderModal.classList.remove("hidden");
+}
+
+function startNewOrder() {
+  cart = [];
+  updateCartDisplay();
+  updateProductCards();
+  orderModal.classList.add("hidden");
+}
+
+productsGrid.addEventListener("click", (e) => {
+  const addBtn = e.target.closest(".product_add-btn");
+  const increaseBtn = e.target.closest(".increase-btn");
+  const decreaseBtn = e.target.closest(".decrease-btn");
+
+  if (addBtn) {
+    const productId = parseInt(addBtn.dataset.id);
+    addToCart(productId);
+  } else if (increaseBtn) {
+    const productId = parseInt(increaseBtn.dataset.id);
+    updateQuantity(productId, 1);
+  } else if (decreaseBtn) {
+    const productId = parseInt(decreaseBtn.dataset.id);
+    updateQuantity(productId, -1);
+  }
+});
+
+cartItemsList.addEventListener("click", (e) => {
+  const removeBtn = e.target.closest(".cart-item-remove");
   if (removeBtn) {
-    removeItem(+removeBtn.dataset.id);
-    return;
-  }
-
-  if (e.target.id === "btnConfirm") {
-    showModal();
-    return;
-  }
-
-  if (e.target.id === "btnStartOver") {
-    hideModal();
-    cart = [];
-    $$(".cart-button[aria-pressed='true']").forEach(showAddLabelOnButton);
-    updateCartDisplay();
-    saveCartToStorage();
-    return;
+    const productId = parseInt(removeBtn.dataset.id);
+    removeFromCart(productId);
   }
 });
 
-document.addEventListener("keydown", (e) => {
-  const pill = e.target.closest?.(".cart-button");
-  if (
-    pill &&
-    (e.key === "Enter" || e.key === " ") &&
-    pill.getAttribute("aria-pressed") === "false"
-  ) {
-    addToCart(+pill.dataset.id);
-    e.preventDefault();
-    return;
-  }
-  const plus = e.target.closest?.(".qty-plus");
-  const minus = e.target.closest?.(".qty-minus");
-  if (plus && (e.key === "Enter" || e.key === " ")) {
-    increaseQuantity(+plus.closest(".cart-button").dataset.id);
-    e.preventDefault();
-  }
-  if (minus && (e.key === "Enter" || e.key === " ")) {
-    decreaseQuantity(+minus.closest(".cart-button").dataset.id);
-    e.preventDefault();
+confirmOrderBtn.addEventListener("click", showOrderConfirmation);
+newOrderBtn.addEventListener("click", startNewOrder);
+orderModal.addEventListener("click", (e) => {
+  if (e.target === orderModal) {
+    orderModal.classList.add("hidden");
   }
 });
 
-$("#searchInput").addEventListener("input", (e) => {
-  searchTerm = e.target.value;
-  displayProducts();
-});
-
-$("#order-modal").addEventListener("click", (e) => {
-  if (e.target.id === "order-modal") hideModal();
-});
-
-loadCartFromStorage();
 displayProducts();
 updateCartDisplay();

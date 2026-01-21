@@ -79,7 +79,7 @@ header h1 {
   margin-bottom: 22px;
 }
 
-/* Add-to-cart pill button */
+/* Add to cart button */
 .product_add-btn {
   position: absolute;
   left: 50%;
@@ -111,7 +111,7 @@ header h1 {
   color: var(--red);
 }
 
-/* Quantity pill sits in the same place */
+
 .quantity-controls {
   position: absolute;
   left: 50%;
